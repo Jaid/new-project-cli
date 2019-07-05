@@ -1,0 +1,10 @@
+githubUser: Jaid
+projectsFolder: E:/Projects
+template: epoch-seconds
+readme: "# {{projectName}}\n## Under construction\nNot much to see right now. Come back lator! :crocodile:"
+description: "Node module {{projectName}} (:construction: Under construction, usage is not recommended!)"
+initialCommitMessage: "Initialized based on https://github.com/{{owner}}/{{template}}"
+lockfileCreationCommitMessage: "Generated lockfile"
+openUrls:
+  - https://github.com/{{owner}}/{{projectName}}
+  - https://travis-ci.com/{{owner}}/{{projectName}}/settings
