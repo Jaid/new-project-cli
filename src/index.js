@@ -22,6 +22,7 @@ import escapeStringRegexp from "escape-string-regexp"
 import pascalCase from "pascal-case"
 import fetchGitRepo from "fetch-git-repo"
 import ms from "ms.macro"
+import isGitRepoDirty from "is-git-repo-dirty"
 
 const job = async ({projectName, description, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
   if (isEmpty(projectName)) {
@@ -131,9 +132,8 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
       NODE_ENV: "development",
     },
   })
-  const newStatus = await gitRepository.status()
-  const isDirtyNow = newStatus.files?.length > 0
-  if (isDirtyNow) {
+  const isDirty = await isGitRepoDirty(projectDir)
+  if (isDirty) {
     await gitRepository.add(projectDir)
     const commitMessage = resolveHandlebars(config.upgradeCommitMessage)
     logger.info(`Commit: ${commitMessage}`)
