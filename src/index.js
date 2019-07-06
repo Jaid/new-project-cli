@@ -21,6 +21,7 @@ import replaceInFile from "replace-in-file"
 import escapeStringRegexp from "escape-string-regexp"
 import pascalCase from "pascal-case"
 import fetchGitRepo from "fetch-git-repo"
+import ms from "ms.macro"
 
 const job = async ({projectName, description, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
   if (isEmpty(projectName)) {
@@ -102,7 +103,7 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
   const gitRepository = simpleGit(projectDir)
   await gitRepository.init()
 
-  await gitRepository.add(".")
+  await gitRepository.add(projectDir)
   await gitRepository.commit(resolveHandlebars(config.initialCommitMessage))
   await execa(npmPath, ["install"], {
     cwd: projectDir,
@@ -110,8 +111,35 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
       NODE_ENV: "development",
     },
   })
-  await gitRepository.add(".")
+  await gitRepository.add(projectDir)
   await gitRepository.commit(resolveHandlebars(config.lockfileCreationCommitMessage))
+
+  logger.info("Upgrading dependencies")
+  await npmCheckUpdates.run({
+    jsonUpgraded: true,
+    packageManager: "npm",
+    upgrade: true,
+    timeout: ms`5 minutes`,
+    silent: true,
+    packageFile: path.join(projectDir, "package.json"),
+    packageFileDir: projectDir,
+  })
+  logger.info("Installing dependencies again")
+  await execa(npmPath, ["install"], {
+    cwd: projectDir,
+    env: {
+      NODE_ENV: "development",
+    },
+  })
+  const newStatus = await gitRepository.status()
+  const isDirtyNow = newStatus.files?.length > 0
+  if (isDirtyNow) {
+    await gitRepository.add(projectDir)
+    const commitMessage = resolveHandlebars(config.upgradeCommitMessage)
+    logger.info(`Commit: ${commitMessage}`)
+    await gitRepository.commit(commitMessage)
+  }
+
   await execa(hubPath, [
     "create",
     ...privateRepo ? ["--private"] : [],

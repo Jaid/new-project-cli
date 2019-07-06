@@ -5,6 +5,7 @@ readme: "# {{projectName}}\n## Under construction\nNot much to see right now. Co
 description: "Node module {{projectName}} (:construction: Under construction, usage is not recommended!)"
 initialCommitMessage: "Initialized based on https://github.com/{{owner}}/{{template}}"
 lockfileCreationCommitMessage: "Generated lockfile"
+upgradeCommitMessage: "Automatically upgraded dependencies"
 openUrls:
   - https://github.com/{{owner}}/{{projectName}}
   - https://travis-ci.com/{{owner}}/{{projectName}}/settings
