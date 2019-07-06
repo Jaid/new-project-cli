@@ -12,6 +12,7 @@
     "escape-string-regexp": "^2.0.0",
     "essential-config": "^3.0.1",
     "execa": "^2.0.3",
+    "fetch-git-repo": "^2.0.0",
     "handlebars": "^4.1.2",
     "has-content": "^1.1.0",
     "header-case": "^1.0.1",

@@ -20,6 +20,7 @@ import open from "open"
 import replaceInFile from "replace-in-file"
 import escapeStringRegexp from "escape-string-regexp"
 import pascalCase from "pascal-case"
+import fetchGitRepo from "fetch-git-repo"
 
 const job = async ({projectName, description, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
   if (isEmpty(projectName)) {
@@ -65,13 +66,12 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
     })
   }
 
-  const cloneUrl = `git@github.com:${owner}/${template}`
-  logger.info(`Cloning from ${cloneUrl}`)
-  await simpleGit().clone(cloneUrl, projectDir)
+  const cloneId = `${owner}/${template}`
+  logger.info(`Cloning from ${cloneId}`)
+  await fetchGitRepo(`${owner}/${template}`, projectDir)
 
   logger.info("Transforming file contents")
   await Promise.all([
-    fsp.remove(path.join(projectDir, ".git")),
     fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme)),
     replaceInFile({
       files: path.join(projectDir, "package.json"),
