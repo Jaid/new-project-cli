@@ -21,7 +21,7 @@ import replaceInFile from "replace-in-file"
 import escapeStringRegexp from "escape-string-regexp"
 import pascalCase from "pascal-case"
 
-const job = async ({projectName, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
+const job = async ({projectName, description, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
   if (isEmpty(projectName)) {
     logger.warn("Given project name is empty")
     process.exit(1)
@@ -116,7 +116,7 @@ const job = async ({projectName, hubPath, codePath, npmPath, skipNameCheck, proj
     "create",
     ...privateRepo ? ["--private"] : [],
     "--description",
-    resolveHandlebars(config.description),
+    description || resolveHandlebars(config.description),
     "--homepage",
     `https://github.com/${owner}/${projectName}`,
   ], {
@@ -186,6 +186,10 @@ const main = async () => {
       type: "string",
       default: config.githubUser,
       description: "Username of GitHub account",
+    },
+    description: {
+      type: "string",
+      description: "Description for GitHub",
     },
   }
 
