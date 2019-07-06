@@ -196,7 +196,7 @@ const main = async () => {
   yargs
     .scriptName("new-project")
     .version(_PKG_VERSION)
-    .command("$0 <projectName>", "Opens twitch.tv/dashboard in a browser", builder, job).argv
+    .command("$0 <projectName>", "Creates a new project based of an existing repo", builder, job).argv
 }
 
 main()
