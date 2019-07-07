@@ -143,9 +143,9 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
   await execa(hubPath, [
     "create",
     ...privateRepo ? ["--private"] : [],
-    "--description",
+    "-d",
     description || resolveHandlebars(config.description),
-    "--homepage",
+    "-h",
     `https://github.com/${owner}/${projectName}`,
   ], {
     cwd: projectDir,
