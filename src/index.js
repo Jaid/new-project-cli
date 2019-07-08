@@ -45,7 +45,7 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
     }
     const packageNameExists = await npmNameExists(projectName)
     if (packageNameExists) {
-      console.error(`Already exists: https://yarnpkg.com/package/${projectName}`)
+      logger.error(`Already exists: https://yarnpkg.com/package/${projectName}`)
       process.exit(1)
     }
   }
@@ -55,7 +55,7 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
 
   const projectDirExists = await fsp.pathExists(projectDir)
   if (projectDirExists) {
-    console.error(`${projectDir} already exists!`)
+    logger.error(`${projectDir} already exists!`)
     process.exit(1)
   }
 
