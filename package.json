@@ -56,5 +56,6 @@
     "test:debug": "DEBUG=\"$DEBUG:$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
     "prepareActionJest": "npm run build:prod"
   },
-  "name": "new-project-cli"
+  "name": "new-project-cli",
+  "description": "Opinionated command line tool that creates a new git repository for an npm package."
 }
