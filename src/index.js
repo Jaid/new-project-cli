@@ -68,19 +68,20 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
     })
   }
 
+  const resolvedDescription = description || resolveHandlebars(config.description)
+
   const cloneId = `${owner}/${template}`
   logger.info(`Cloning from ${cloneId}`)
   await fetchGitRepo(`${owner}/${template}`, projectDir)
 
   logger.info("Transforming file contents")
-  await Promise.all([
-    fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme)),
-    replaceInFile({
-      files: path.join(projectDir, "package.json"),
-      from: /"version": "\d+\.\d+\.\d+"/,
-      to: `"version": "${initialVersion}"`,
-    }),
-  ])
+  await fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme))
+
+  const pkgFile = path.join(projectDir, "package.json")
+  const pkg = await fsp.readJson(pkgFile)
+  pkg.description = resolvedDescription
+  pkg.version = initialVersion
+  await fsp.writeJson(pkgFile, pkg)
 
   await replaceInFile({
     files: path.join(projectDir, "**"),
@@ -144,7 +145,7 @@ const job = async ({projectName, description, hubPath, codePath, npmPath, skipNa
     "create",
     ...privateRepo ? ["--private"] : [],
     "-d",
-    description || resolveHandlebars(config.description),
+    resolvedDescription,
     "-h",
     `https://github.com/${owner}/${projectName}`,
   ], {
