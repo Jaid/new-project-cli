@@ -6,11 +6,11 @@ Opinionated command line tool that creates a new git repository for an npm packa
 ## Installation
 <a href='https://npmjs.com/package/new-project-cli'><img alt='npm logo' src='https://github.com/Jaid/action-readme/raw/master/images/base-assets/npm.png'/></a>
 ```bash
-npm install --global new-project-cli@^1.4.0
+npm install --global new-project-cli@^1.4.1
 ```
 <a href='https://yarnpkg.com/package/new-project-cli'><img alt='Yarn logo' src='https://github.com/Jaid/action-readme/raw/master/images/base-assets/yarn.png'/></a>
 ```bash
-yarn global add new-project-cli@^1.4.0
+yarn global add new-project-cli@^1.4.1
 ```
 
 
