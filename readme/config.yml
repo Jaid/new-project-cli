@@ -1,1 +1,3 @@
 installation: global
+personal: true
+binExample: new-project-cli my-new-package --description "Description of package." --template epoch-seconds
