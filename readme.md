@@ -5,7 +5,7 @@
 <a href="https://actions-badge.atrox.dev/Jaid/new-project-cli/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Fnew-project-cli%2Fbadge" alt="Build status"/></a> <a href="https://github.com/Jaid/new-project-cli/commits"><img src="https://img.shields.io/github/commits-since/Jaid/new-project-cli/v1.4.1?style=flat-square&logo=github" alt="Commits since v1.4.1"/></a> <a href="https://github.com/Jaid/new-project-cli/commits"><img src="https://img.shields.io/github/last-commit/Jaid/new-project-cli?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/new-project-cli/issues"><img src="https://img.shields.io/github/issues/Jaid/new-project-cli?style=flat-square&logo=github" alt="Issues"/></a>  
 <a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/v/new-project-cli?style=flat-square&logo=npm&label=latest%20version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/new-project-cli/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/new-project-cli?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/dm/new-project-cli?style=flat-square&logo=npm" alt="Downloads"/></a>
 
-**Opinionated command line tool that creates a new git repository for an npm package.**
+**CLI tool that creates a new GitHub repository for an npm package.**
 
 #### Opinionated
 
