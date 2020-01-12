@@ -4,7 +4,7 @@
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "dependencies": {
     "@absolunet/fsp": "^1.6.2",
-    "@babel/runtime": "^7.7.7",
+    "@babel/runtime": "^7.8.0",
     "camel-case": "^4.1.1",
     "constant-case": "^3.0.3",
     "ensure-array": "^1.0.0",
@@ -12,7 +12,7 @@
     "essential-config": "^4.0.2",
     "execa": "^4.0.0",
     "fetch-git-repo": "^2.0.0",
-    "handlebars": "^4.7.0",
+    "handlebars": "^4.7.1",
     "has-content": "^1.1.0",
     "header-case": "^2.0.3",
     "is-git-repo-dirty": "^1.0.1",
@@ -33,15 +33,15 @@
     "acorn": "^7.1.0",
     "ajv": "^6.10.2",
     "babel-jest": "^24.9.0",
-    "babel-preset-jaid": "^7.3.0",
+    "babel-preset-jaid": "^7.3.1",
     "browserslist-config-jaid-node": "^2.2.2",
     "caniuse-lite": "^1.0.30001020",
     "coffee": "^5.2.2",
     "eslint": "^6.8.0",
-    "eslint-config-jaid": "^1.41.1",
+    "eslint-config-jaid": "^1.42.0",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
-    "webpack-config-jaid": "^9.4.0"
+    "webpack-config-jaid": "^11.0.0"
   },
   "scripts": {
     "clean": "rimraf dist/",
