@@ -1,9 +1,9 @@
 # new-project-cli
 
 
-<a href="https://raw.githubusercontent.com/Jaid/new-project-cli/master/license.txt"><img src="https://img.shields.io/github/license/Jaid/new-project-cli?style=flat-square" alt="License"/></a>  
-<a href="https://actions-badge.atrox.dev/Jaid/new-project-cli/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Fnew-project-cli%2Fbadge" alt="Build status"/></a> <a href="https://github.com/Jaid/new-project-cli/commits"><img src="https://img.shields.io/github/commits-since/Jaid/new-project-cli/v2.0.0?style=flat-square&logo=github" alt="Commits since v2.0.0"/></a> <a href="https://github.com/Jaid/new-project-cli/commits"><img src="https://img.shields.io/github/last-commit/Jaid/new-project-cli?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/new-project-cli/issues"><img src="https://img.shields.io/github/issues/Jaid/new-project-cli?style=flat-square&logo=github" alt="Issues"/></a>  
-<a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/v/new-project-cli?style=flat-square&logo=npm&label=latest%20version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/new-project-cli/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/new-project-cli?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/dm/new-project-cli?style=flat-square&logo=npm" alt="Downloads"/></a>
+<a href="https://raw.githubusercontent.com/jaid/new-project-cli/master/license.txt"><img src="https://img.shields.io/github/license/jaid/new-project-cli?style=flat-square" alt="License"/></a> <a href="https://github.com/sponsors/jaid"><img src="https://img.shields.io/badge/<3-Sponsor-FF45F1?style=flat-square" alt="Sponsor new-project-cli"/></a>
+<a href="https://actions-badge.atrox.dev/jaid/new-project-cli/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaid%2Fnew-project-cli%2Fbadge" alt="Build status"/></a> <a href="https://github.com/jaid/new-project-cli/commits"><img src="https://img.shields.io/github/commits-since/jaid/new-project-cli/v2.0.0?style=flat-square&logo=github" alt="Commits since v2.0.0"/></a> <a href="https://github.com/jaid/new-project-cli/commits"><img src="https://img.shields.io/github/last-commit/jaid/new-project-cli?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/jaid/new-project-cli/issues"><img src="https://img.shields.io/github/issues/jaid/new-project-cli?style=flat-square&logo=github" alt="Issues"/></a>  
+<a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/v/new-project-cli?style=flat-square&logo=npm&label=latest%20version" alt="Latest version on npm"/></a> <a href="https://github.com/jaid/new-project-cli/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/new-project-cli?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/new-project-cli"><img src="https://img.shields.io/npm/dm/new-project-cli?style=flat-square&logo=npm" alt="Downloads"/></a>
 
 **CLI tool that creates a new GitHub repository for an npm package.**
 
@@ -36,7 +36,6 @@ yarn global add new-project-cli@^2.0.0
 
 
 
-
 ## CLI Usage
 After installing package `new-project-cli` globally, you can use its command line interface.
 ```bash
@@ -56,7 +55,7 @@ new-project-cli --help
 
 Setting up:
 ```bash
-git clone git@github.com:Jaid/new-project-cli.git
+git clone git@github.com:jaid/new-project-cli.git
 cd new-project-cli
 npm install
 ```
