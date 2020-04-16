@@ -57,10 +57,12 @@
     "prepareActionJest": "npm run build:prod"
   },
   "name": "new-project-cli",
-  "description": "CLI tool that creates a new GitHub repository for an npm package.",
+  "description": "Opinionated command line tool that creates a new git repository for an npm package.",
   "funding": "https://github.com/sponsors/jaid",
   "repository": {
     "type": "git",
     "url": "https://github.com/jaid/new-project-cli"
-  }
+  },
+  "homepage": "https://github.com/Jaid/new-project-cli",
+  "keywords": []
 }
