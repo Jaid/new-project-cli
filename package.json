@@ -63,5 +63,15 @@
     "url": "https://github.com/jaid/new-project-cli"
   },
   "homepage": "https://github.com/Jaid/new-project-cli",
-  "keywords": []
+  "keywords": [
+    "automation",
+    "cli",
+    "git",
+    "github",
+    "github-api",
+    "new-project",
+    "tool",
+    "util",
+    "utility"
+  ]
 }
