@@ -4,7 +4,7 @@ import logger from "lib/logger"
 
 import defaults from "./defaults.yml"
 
-const config = essentialConfig(_PKG_TITLE, {defaults})
+const config = essentialConfig(process.env.REPLACE_PKG_TITLE, {defaults})
 
 if (!config) {
   logger.warn("Set up default config, please review and edit this file")
