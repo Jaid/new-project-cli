@@ -23,6 +23,21 @@ import config from "lib/config"
 import logger from "lib/logger"
 
 /**
+ * @typedef {Object} Argv
+ * @prop {string} projectName
+ * @prop {string} description
+ * @prop {string} hubPath
+ * @prop {string} codePath
+ * @prop {string} npmPath
+ * @prop {boolean} skipNameCheck
+ * @prop {string} projectsFolder
+ * @prop {string} template
+ * @prop {string} initialVersion
+ * @prop {boolean} privateRepo
+ * @prop {string} owner
+ */
+
+/**
  * @param {import("yargs").Arguments<Argv>} argv
  * @return {Promise<void>}
  */
