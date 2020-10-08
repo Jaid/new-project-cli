@@ -41,34 +41,34 @@ import logger from "lib/logger"
  * @param {import("yargs").Arguments<Argv>} argv
  * @return {Promise<void>}
  */
-export default async ({projectName, description, hubPath, codePath, npmPath, skipNameCheck, projectsFolder, template, initialVersion, privateRepo, owner}) => {
-  if (isEmpty(projectName)) {
+export default async argv => {
+  if (isEmpty(argv.argv.projectName)) {
     logger.warn("Given project name is empty")
     process.exit(1)
   }
 
-  if (!skipNameCheck) {
-    const validationResult = validateNpmPackageName(projectName)
+  if (!argv.skipNameCheck) {
+    const validationResult = validateNpmPackageName(argv.projectName)
     const validationErrors = [
       ...validationResult.warnings || [],
       ...validationResult.errors || [],
     ]
     if (hasContent(validationErrors)) {
-      logger.error("Invalid npm package name %s", projectName)
+      logger.error("Invalid npm package name %s", argv.projectName)
       for (const validationError of validationErrors) {
         logger.error(validationError)
       }
       process.exit(1)
     }
-    const packageNameExists = await npmNameExists(projectName)
+    const packageNameExists = await npmNameExists(argv.projectName)
     if (packageNameExists) {
-      logger.error(`Already exists: https://yarnpkg.com/package/${projectName}`)
+      logger.error(`Already exists: https://yarnpkg.com/package/${argv.projectName}`)
       process.exit(1)
     }
   }
 
-  projectsFolder = path.resolve(projectsFolder)
-  const projectDir = path.join(projectsFolder, projectName)
+  const projectsFolder = path.resolve(argv.projectsFolder)
+  const projectDir = path.join(projectsFolder, argv.projectName)
 
   const projectDirExists = await fsp.pathExists(projectDir)
   if (projectDirExists) {
@@ -78,18 +78,18 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
 
   const resolveHandlebars = templateString => {
     return handlebars.compile(templateString, {noEscape: true})({
-      owner,
-      template,
-      initialVersion,
-      projectName,
+      owner: argv.owner,
+      template: argv.template,
+      initialVersion: argv.initialVersion,
+      projectName: argv.projectName,
     })
   }
 
-  const resolvedDescription = description || resolveHandlebars(config.description)
+  const resolvedDescription = argv.description || resolveHandlebars(config.description)
 
-  const cloneId = `${owner}/${template}`
+  const cloneId = `${argv.owner}/${argv.template}`
   logger.info(`Cloning from ${cloneId}`)
-  await fetchGitRepo(`${owner}/${template}`, projectDir)
+  await fetchGitRepo(`${argv.owner}/${argv.template}`, projectDir)
 
   logger.info("Transforming file contents")
   await fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme))
@@ -97,24 +97,24 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
   const pkgFile = path.join(projectDir, "package.json")
   const pkg = await fsp.readJson(pkgFile)
   pkg.description = resolvedDescription
-  pkg.version = initialVersion
+  pkg.version = argv.initialVersion
   await fsp.writeJson(pkgFile, pkg)
 
   await replaceInFile({
     files: path.join(projectDir, "**"),
     from: [
-      new RegExp(escapeStringRegexp(template), "g"),
-      new RegExp(escapeStringRegexp(camelCase(template)), "g"),
-      new RegExp(escapeStringRegexp(pascalCase(template)), "g"),
-      new RegExp(escapeStringRegexp(constantCase(template)), "g"),
-      new RegExp(escapeStringRegexp(headerCase(template)), "g"),
+      new RegExp(escapeStringRegexp(argv.template), "g"),
+      new RegExp(escapeStringRegexp(camelCase(argv.template)), "g"),
+      new RegExp(escapeStringRegexp(pascalCase(argv.template)), "g"),
+      new RegExp(escapeStringRegexp(constantCase(argv.template)), "g"),
+      new RegExp(escapeStringRegexp(headerCase(argv.template)), "g"),
     ],
     to: [
-      projectName,
-      camelCase(projectName),
-      pascalCase(projectName),
-      constantCase(projectName),
-      headerCase(projectName),
+      argv.projectName,
+      camelCase(argv.projectName),
+      pascalCase(argv.projectName),
+      constantCase(argv.projectName),
+      headerCase(argv.projectName),
     ],
   })
 
@@ -124,7 +124,7 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
 
   await gitRepository.add(projectDir)
   await gitRepository.commit(resolveHandlebars(config.initialCommitMessage))
-  await execa(npmPath, ["install"], {
+  await execa(argv.npmPath, ["install"], {
     cwd: projectDir,
     env: {
       NODE_ENV: "development",
@@ -144,7 +144,7 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
     packageFileDir: projectDir,
   })
   logger.info("Installing dependencies again")
-  await execa(npmPath, ["install"], {
+  await execa(argv.npmPath, ["install"], {
     cwd: projectDir,
     env: {
       NODE_ENV: "development",
@@ -158,17 +158,17 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
     await gitRepository.commit(commitMessage)
   }
 
-  await execa(hubPath, [
+  await execa(argv.hubPath, [
     "create",
-    ...privateRepo ? ["--private"] : [],
+    ...argv.privateRepo ? ["--private"] : [],
     "-d",
     resolvedDescription,
     "-h",
-    `https://github.com/${owner}/${projectName}`,
+    `https://github.com/${argv.owner}/${argv.projectName}`,
   ], {
     cwd: projectDir,
   })
-  await execa(hubPath, [
+  await execa(argv.hubPath, [
     "push",
     "--set-upstream",
     "origin",
@@ -176,7 +176,7 @@ export default async ({projectName, description, hubPath, codePath, npmPath, ski
   ], {
     cwd: projectDir,
   })
-  await execa(codePath, ["--new-window", projectDir])
+  await execa(argv.codePath, ["--new-window", projectDir])
   for (const url of ensureArray(config.openUrls)) {
     open(resolveHandlebars(url), {})
   }
