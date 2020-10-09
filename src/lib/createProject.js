@@ -45,7 +45,6 @@ export default async argv => {
   const projectDir = path.join(projectsFolder, argv.projectName)
 
   logger.info(`Project: ${argv.projectName}`)
-  logger.info(`New folder: ${projectDir}`)
   if (argv.template) {
     logger.info(`Template: ${argv.template}`)
   }
@@ -113,13 +112,14 @@ export default async argv => {
 
     await fetchGitRepo(cloneId, projectDir)
     const projectDirExistsNow = await fsp.pathExists(projectDir)
-    if (projectDirExistsNow) {
-      result.createdDir = true
-    } else {
+    if (!projectDirExistsNow) {
       logger.error(`Could not clone ${cloneId} to ${projectDir} for some reason`)
       result.status = "couldNotClone"
       return result
     }
+
+    result.createdDir = true
+    logger.info(`New folder: ${projectDir}`)
 
     logger.info("Transforming file contents")
     await fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme))
