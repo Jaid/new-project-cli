@@ -1,15 +1,15 @@
-import whichPromise from "which-promise"
 import yargs from "yargs"
 
 import config from "lib/config"
+import which from "lib/which"
 
 import handleCommand from "src/main"
 
 const main = async () => {
   const [codePath, hubPath, npmPath] = await Promise.all([
-    whichPromise("code"),
-    whichPromise("hub"),
-    whichPromise("npm"),
+    which("code"),
+    which("hub"),
+    which("npm"),
   ])
   /**
    * @type {import("yargs").CommandBuilder}

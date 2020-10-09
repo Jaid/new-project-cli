@@ -155,31 +155,36 @@ export default async argv => {
 
     await gitRepository.add(projectDir)
     await gitRepository.commit(resolveHandlebars(config.initialCommitMessage))
-    await execa(argv.npmPath, ["install"], {
-      cwd: projectDir,
-      env: {
-        NODE_ENV: "development",
-      },
-    })
+    if (argv.npmPath) {
+      await execa(argv.npmPath, ["install"], {
+        cwd: projectDir,
+        env: {
+          NODE_ENV: "development",
+        },
+      })
+    }
     await gitRepository.add(projectDir)
     await gitRepository.commit(resolveHandlebars(config.lockfileCreationCommitMessage))
 
-    logger.info("Upgrading dependencies")
-    await npmCheckUpdates.run({
-      jsonUpgraded: true,
-      packageManager: "npm",
-      upgrade: true,
-      timeout: ms`5 minutes`,
-      silent: true,
-      packageFile: path.join(projectDir, "package.json"),
-    })
-    logger.info("Installing dependencies again")
-    await execa(argv.npmPath, ["install"], {
-      cwd: projectDir,
-      env: {
-        NODE_ENV: "development",
-      },
-    })
+    if (argv.npmPath) {
+      logger.info("Upgrading dependencies")
+      await npmCheckUpdates.run({
+        jsonUpgraded: true,
+        packageManager: "npm",
+        upgrade: true,
+        timeout: ms`5 minutes`,
+        silent: true,
+        packageFile: path.join(projectDir, "package.json"),
+      })
+      logger.info("Installing dependencies again")
+      await execa(argv.npmPath, ["install"], {
+        cwd: projectDir,
+        env: {
+          NODE_ENV: "development",
+        },
+      })
+    }
+
     const isDirty = await isGitRepoDirty(projectDir)
     if (isDirty) {
       await gitRepository.add(projectDir)
@@ -188,44 +193,48 @@ export default async argv => {
       await gitRepository.commit(commitMessage)
     }
 
-    const createRepoArguments = [
-      "create",
-      ...argv.privateRepo ? ["--private"] : [],
-      "-d",
-      resolvedDescription,
-      "-h",
-      `https://github.com/${argv.owner}/${argv.projectName}`,
-    ]
-    if (argv.dry) {
-      console.dir(`[Dry] ${argv.hubPath} ${createRepoArguments}`)
-    } else {
-      await execa(argv.hubPath, createRepoArguments, {
-        cwd: projectDir,
-      })
+    if (argv.hubPath) {
+      const createRepoArguments = [
+        "create",
+        ...argv.privateRepo ? ["--private"] : [],
+        "-d",
+        resolvedDescription,
+        "-h",
+        `https://github.com/${argv.owner}/${argv.projectName}`,
+      ]
+      if (argv.dry) {
+        console.dir(`[Dry] ${argv.hubPath} ${createRepoArguments}`)
+      } else {
+        await execa(argv.hubPath, createRepoArguments, {
+          cwd: projectDir,
+        })
+      }
+
+      const pushArguments = [
+        "push",
+        "--set-upstream",
+        "origin",
+        "master",
+      ]
+      if (argv.dry) {
+        console.dir(`[Dry] ${argv.hubPath} ${pushArguments}`)
+      } else {
+        await execa(argv.hubPath, pushArguments, {
+          cwd: projectDir,
+        })
+      }
     }
 
-    const pushArguments = [
-      "push",
-      "--set-upstream",
-      "origin",
-      "master",
-    ]
-    if (argv.dry) {
-      console.dir(`[Dry] ${argv.hubPath} ${pushArguments}`)
-    } else {
-      await execa(argv.hubPath, pushArguments, {
-        cwd: projectDir,
-      })
-    }
-
-    const openCodeArguments = [
-      "--new-window",
-      projectDir,
-    ]
-    if (argv.dry) {
-      console.dir(`[Dry] ${argv.codePath} ${openCodeArguments}`)
-    } else {
-      await execa(argv.codePath, openCodeArguments)
+    if (argv.codePath) {
+      const openCodeArguments = [
+        "--new-window",
+        projectDir,
+      ]
+      if (argv.dry) {
+        console.dir(`[Dry] ${argv.codePath} ${openCodeArguments}`)
+      } else {
+        await execa(argv.codePath, openCodeArguments)
+      }
     }
 
     for (const urlTemplate of ensureArray(config.openUrls)) {
