@@ -29,10 +29,11 @@ import logger from "lib/logger"
 
 /**
  * @typedef {Object} Result
- * @prop {"ok"|"unknown"|"emptyName"|"invalidNpmName"|"alreadyExistsOnNpm"|"dirAlreadyExists"|"unknownError"} status
+ * @prop {"ok"|"unknown"|"emptyName"|"invalidNpmName"|"alreadyExistsOnNpm"|"dirAlreadyExists"|"unknownError"|"couldNotClone"} status
  * @prop {number} exitCode
  * @prop {string} projectsFolder
  * @prop {string} projectDir
+ * @prop {boolean} createdDir
  */
 
 /**
@@ -55,6 +56,7 @@ export default async argv => {
   const result = {
     status: "unknown",
     exitCode: 1,
+    createdDir: false,
     projectsFolder,
     projectDir,
   }
@@ -108,7 +110,16 @@ export default async argv => {
 
     const cloneId = `${argv.owner}/${argv.template}`
     logger.info(`Cloning from ${cloneId}`)
-    await fetchGitRepo(`${argv.owner}/${argv.template}`, projectDir)
+
+    await fetchGitRepo(cloneId, projectDir)
+    const projectDirExistsNow = await fsp.pathExists(projectDir)
+    if (projectDirExistsNow) {
+      result.createdDir = true
+    } else {
+      logger.error(`Could not clone ${cloneId} to ${projectDir} for some reason`)
+      result.status = "couldNotClone"
+      return result
+    }
 
     logger.info("Transforming file contents")
     await fsp.writeFile(path.join(projectDir, "readme.md"), resolveHandlebars(config.readme))
