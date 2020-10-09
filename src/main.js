@@ -32,7 +32,7 @@ export default async argv => {
   logger.info(`Result: ${result.status}`)
   logger.info(`Timing: ${readableMs(endTime - startTime)}`)
 
-  if (argv.dry && result.status !== "dirAlreadyExists") {
+  if (argv.dry && result.createdDir) {
     await fs.rmdir(result.projectDir, {
       recursive: true,
     })
