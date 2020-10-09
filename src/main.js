@@ -5,6 +5,7 @@ import ensureArray from "ensure-array"
 import escapeStringRegexp from "escape-string-regexp"
 import execa from "execa"
 import fetchGitRepo from "fetch-git-repo"
+import fs from "fs/promises"
 import handlebars from "handlebars"
 import hasContent, {isEmpty} from "has-content"
 import {headerCase} from "header-case"
@@ -16,6 +17,7 @@ import open from "open"
 import {pascalCase} from "pascal-case"
 import path from "path"
 import replaceInFile from "replace-in-file"
+import rimraf from "rimraf"
 import simpleGit from "simple-git/promise"
 import validateNpmPackageName from "validate-npm-package-name"
 
@@ -35,6 +37,7 @@ import logger from "lib/logger"
  * @prop {string} initialVersion
  * @prop {boolean} privateRepo
  * @prop {string} owner
+ * @prop {boolean} dry
  */
 
 /**
@@ -42,7 +45,7 @@ import logger from "lib/logger"
  * @return {Promise<void>}
  */
 export default async argv => {
-  if (isEmpty(argv.argv.projectName)) {
+  if (isEmpty(argv.projectName)) {
     logger.warn("Given project name is empty")
     process.exit(1)
   }
@@ -158,26 +161,67 @@ export default async argv => {
     await gitRepository.commit(commitMessage)
   }
 
-  await execa(argv.hubPath, [
+  const createRepoArguments = [
     "create",
     ...argv.privateRepo ? ["--private"] : [],
     "-d",
     resolvedDescription,
     "-h",
     `https://github.com/${argv.owner}/${argv.projectName}`,
-  ], {
-    cwd: projectDir,
-  })
-  await execa(argv.hubPath, [
+  ]
+  if (argv.dry) {
+    console.dir("[Dry] ", argv.hubPath, createRepoArguments)
+  } else {
+    await execa(argv.hubPath, createRepoArguments, {
+      cwd: projectDir,
+    })
+  }
+
+  const pushArguments = [
     "push",
     "--set-upstream",
     "origin",
     "master",
-  ], {
-    cwd: projectDir,
-  })
-  await execa(argv.codePath, ["--new-window", projectDir])
-  for (const url of ensureArray(config.openUrls)) {
-    open(resolveHandlebars(url), {})
+  ]
+  if (argv.dry) {
+    console.dir("[Dry] ", argv.hubPath, pushArguments)
+  } else {
+    await execa(argv.hubPath, pushArguments, {
+      cwd: projectDir,
+    })
+  }
+
+  const openCodeArguments = [
+    "--new-window",
+    projectDir,
+  ]
+  if (argv.dry) {
+    console.dir("[Dry] ", argv.codePath, openCodeArguments)
+  } else {
+    await execa(argv.codePath, openCodeArguments)
+  }
+
+  for (const urlTemplate of ensureArray(config.openUrls)) {
+    const url = resolveHandlebars(urlTemplate)
+    if (argv.dry) {
+      console.dir("[Dry] Open URL ", url)
+    } else {
+      await open(url, {})
+    }
+  }
+
+  if (argv.dry) {
+    try {
+      await fs.rmdir(projectDir, {
+        recursive: true,
+      })
+    } catch (error) {
+      logger.error(error)
+    }
+    const projectDirStillExists = await fsp.pathExists(projectDir)
+    if (projectDirStillExists) {
+      logger.warn(`Path ${projectDir} still exists, you have to manually remove it`)
+    }
+    process.exit(1)
   }
 }

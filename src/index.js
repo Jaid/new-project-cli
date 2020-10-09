@@ -61,6 +61,10 @@ const main = async () => {
       type: "string",
       description: "Description for GitHub",
     },
+    dry: {
+      type: "boolean",
+      description: "Revert changes instantly after setting up a new project",
+    },
   }
   yargs
     .scriptName(process.env.REPLACE_PKG_NAME)
