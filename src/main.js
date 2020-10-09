@@ -102,6 +102,7 @@ export default async argv => {
   pkg.version = argv.initialVersion
   await fsp.writeJson(pkgFile, pkg)
 
+  // @ts-ignore This is callable
   await replaceInFile({
     files: path.join(projectDir, "**"),
     from: [
@@ -143,7 +144,6 @@ export default async argv => {
     timeout: ms`5 minutes`,
     silent: true,
     packageFile: path.join(projectDir, "package.json"),
-    packageFileDir: projectDir,
   })
   logger.info("Installing dependencies again")
   await execa(argv.npmPath, ["install"], {
@@ -169,7 +169,7 @@ export default async argv => {
     `https://github.com/${argv.owner}/${argv.projectName}`,
   ]
   if (argv.dry) {
-    console.dir("[Dry] ", argv.hubPath, createRepoArguments)
+    console.dir(`[Dry] ${argv.hubPath} ${createRepoArguments}`)
   } else {
     await execa(argv.hubPath, createRepoArguments, {
       cwd: projectDir,
@@ -183,7 +183,7 @@ export default async argv => {
     "master",
   ]
   if (argv.dry) {
-    console.dir("[Dry] ", argv.hubPath, pushArguments)
+    console.dir(`[Dry] ${argv.hubPath} ${pushArguments}`)
   } else {
     await execa(argv.hubPath, pushArguments, {
       cwd: projectDir,
@@ -195,7 +195,7 @@ export default async argv => {
     projectDir,
   ]
   if (argv.dry) {
-    console.dir("[Dry] ", argv.codePath, openCodeArguments)
+    console.dir(`[Dry] ${argv.codePath} ${openCodeArguments}`)
   } else {
     await execa(argv.codePath, openCodeArguments)
   }
