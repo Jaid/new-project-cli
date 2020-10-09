@@ -17,7 +17,6 @@ import open from "open"
 import {pascalCase} from "pascal-case"
 import path from "path"
 import replaceInFile from "replace-in-file"
-import rimraf from "rimraf"
 import simpleGit from "simple-git/promise"
 import validateNpmPackageName from "validate-npm-package-name"
 
