@@ -6,5 +6,6 @@ const main = path.resolve(process.env.MAIN)
 
 it("should run", () => coffee.fork(main, ["A"])
   .expect("code", 1)
+  .expect("stdout", /Result: invalidNpmName/s)
   .debug(true)
   .end(), ms`30 seconds`)
