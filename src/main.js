@@ -1,5 +1,5 @@
 import fsp from "@absolunet/fsp"
-import fs from "fs/promises"
+import {promises as fs} from "fs"
 import readableMs from "readable-ms"
 
 import createProject from "lib/createProject"
