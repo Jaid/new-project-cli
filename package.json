@@ -24,7 +24,7 @@
     "pify": "^5.0.0",
     "readable-ms": "^2.0.4",
     "replace-in-file": "^6.1.0",
-    "simple-git": "^2.21.0",
+    "simple-git": "^3.5.0",
     "validate-npm-package-name": "^3.0.0",
     "which": "^2.0.2",
     "which-promise": "^1.0.0",
